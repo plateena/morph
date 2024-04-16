@@ -1,0 +1,49 @@
+services:
+
+  # Nginx Service
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./app/src:/var/www/html
+      - ./vue/src:/var/www/vue
+    depends_on:
+      - php
+
+  # PHP Service (with PHP-FPM)
+  php:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/src:/var/www/html
+    depends_on:
+      - mysql
+
+  # Vue.js Service
+  vue:
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./vue/src:/var/www/vue
+
+  # MySQL Service
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: part1
+      MYSQL_USER: part1
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
