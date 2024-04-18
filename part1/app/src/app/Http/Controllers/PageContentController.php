@@ -45,14 +45,17 @@ class PageContentController extends Controller
     public function show(PageContent $pageContent): JsonResponse
     {
         // Eager load the 'tags' relation
-        $pageContent->load('tags');
+        $pageContent->load("tags");
 
         // Optionally, you can return a JSON response with the page content data
-        return response()->json([
-            'success' => true,
-            'message' => 'Page content retrieved successfully',
-            'page_content' => $pageContent,
-        ], 200);
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Page content retrieved successfully",
+                "page_content" => $pageContent,
+            ],
+            200
+        );
     }
 
     public function create(Request $request): JsonResponse
@@ -92,8 +95,10 @@ class PageContentController extends Controller
      * @param  \App\Models\PageContent  $pageContent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PageContent $pageContent): JsonResponse
-    {
+    public function update(
+        Request $request,
+        PageContent $pageContent
+    ): JsonResponse {
         // Validate the incoming request data
         $validatedData = $request->validate([
             "title" => "required|string|max:255",
@@ -125,7 +130,24 @@ class PageContentController extends Controller
         );
     }
 
-    public function remove(PageContent $pageContent)
+    /**
+     * Remove the specified page content from storage.
+     *
+     * @param  \App\Models\PageContent  $pageContent
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(PageContent $pageContent): JsonResponse
     {
+        // Delete the page content
+        $pageContent->delete();
+
+        // Optionally, you can return a JSON response with a success message
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Page content deleted successfully",
+            ],
+            200
+        );
     }
 }

@@ -32,16 +32,22 @@ Route::group(["prefix" => "api/v1", "as" => "api.v1."], function () {
             Route::get("/", [PageContentController::class, "index"])->name(
                 "index"
             );
-            Route::get("/{pageContent}", [PageContentController::class, "show"])->name(
-                "show"
-            );
+            Route::get("/{pageContent}", [
+                PageContentController::class,
+                "show",
+            ])->name("show");
             Route::post("/", [PageContentController::class, "create"])->name(
                 "create"
             );
-            Route::put("/{page_content}", [
+            Route::put("/{pageContent}", [
                 PageContentController::class,
                 "update",
             ])->name("update");
+
+            Route::delete("/{pageContent}", [
+                PageContentController::class,
+                "destroy",
+            ])->name("destroy");
         }
     );
 });
