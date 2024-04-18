@@ -23,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'api/v1', 'as' => 'api.v1.'], function () {
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
+    Route::post('page-content', [PageContentController::class, 'create'])->name('page-content');
 });

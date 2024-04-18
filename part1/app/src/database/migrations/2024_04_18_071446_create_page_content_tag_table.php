@@ -10,12 +10,15 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create("page_contents", function (Blueprint $table) {
+        Schema::create("page_content_tag", function (Blueprint $table) {
             $table->id();
-            $table->string("title")->unique();
-            $table->text("content");
+            $table
+                ->foreignId("page_content_id")
+                ->constrained()
+                ->onDelete("cascade");
+            $table->foreignId("tag_id")->constrained()->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -25,8 +28,8 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists("page_contents");
+        Schema::dropIfExists("page_content_tag");
     }
 };
