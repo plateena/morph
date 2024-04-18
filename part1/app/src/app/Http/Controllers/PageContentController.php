@@ -36,8 +36,23 @@ class PageContentController extends Controller
         );
     }
 
-    public function find(PageContent $pageContent)
+    /**
+     * Display the specified page content.
+     *
+     * @param  \App\Models\PageContent  $pageContent
+     * @return \Illuminate\Http\Response
+     */
+    public function show(PageContent $pageContent): JsonResponse
     {
+        // Eager load the 'tags' relation
+        $pageContent->load('tags');
+
+        // Optionally, you can return a JSON response with the page content data
+        return response()->json([
+            'success' => true,
+            'message' => 'Page content retrieved successfully',
+            'page_content' => $pageContent,
+        ], 200);
     }
 
     public function create(Request $request): JsonResponse

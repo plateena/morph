@@ -32,6 +32,9 @@ Route::group(["prefix" => "api/v1", "as" => "api.v1."], function () {
             Route::get("/", [PageContentController::class, "index"])->name(
                 "index"
             );
+            Route::get("/{pageContent}", [PageContentController::class, "show"])->name(
+                "show"
+            );
             Route::post("/", [PageContentController::class, "create"])->name(
                 "create"
             );
