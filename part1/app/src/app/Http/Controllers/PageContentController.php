@@ -9,15 +9,38 @@ use App\Models\Tag;
 
 class PageContentController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Display a listing of the page content.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request): JsonResponse
     {
+        // Retrieve all page content items or filter by title if provided
+        $query = PageContent::query();
+
+        if ($request->has("title")) {
+            $query->where("title", "like", "%" . $request->title . "%");
+        }
+
+        $pageContents = $query->get();
+
+        // Optionally, you can return a JSON response with the page content data
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Page content retrieved successfully",
+                "page_contents" => $pageContents,
+            ],
+            200
+        );
     }
 
     public function find(PageContent $pageContent)
     {
     }
 
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
@@ -54,35 +77,37 @@ class PageContentController extends Controller
      * @param  \App\Models\PageContent  $pageContent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PageContent $pageContent)
+    public function update(Request $request, PageContent $pageContent): JsonResponse
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id', // Ensure all tag IDs exist in the tags table
-            // Add more validation rules as needed
+            "title" => "required|string|max:255",
+            "content" => "required|string",
+            "tags" => "nullable|array",
+            "tags.*" => "exists:tags,id", // Ensure all tag IDs exist in the tags table
         ]);
 
         // Update the page content with the validated data
         $pageContent->update([
-            'title' => $validatedData['title'],
-            'content' => $validatedData['content'],
+            "title" => $validatedData["title"],
+            "content" => $validatedData["content"],
             // Add more fields to update as needed
         ]);
 
         // Update tags associated with the page content
-        if (isset($validatedData['tags'])) {
-            $pageContent->tags()->sync($validatedData['tags']);
+        if (isset($validatedData["tags"])) {
+            $pageContent->tags()->sync($validatedData["tags"]);
         }
 
         // Optionally, you can return a response indicating success
-        return response()->json([
-            'success' => true,
-            'message' => 'Page content updated successfully',
-            'page_content' => $pageContent,
-        ], 200);
+        return response()->json(
+            [
+                "success" => true,
+                "message" => "Page content updated successfully",
+                "page_content" => $pageContent,
+            ],
+            200
+        );
     }
 
     public function remove(PageContent $pageContent)
