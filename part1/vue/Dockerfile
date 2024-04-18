@@ -1,6 +1,9 @@
 # Use official Node.js LTS version as the base image
 FROM node:lts-alpine AS build
 
+# Set the SHELL environment variable
+ENV SHELL=/bin/sh
+
 # Set the working directory in the container
 WORKDIR /var/www/vue
 
