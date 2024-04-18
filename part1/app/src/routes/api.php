@@ -16,12 +16,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'api/v1', 'as' => 'api.v1.'], function () {
-    Route::post('register', [AuthController::class, 'register'])->name('register');
-    Route::post('login', [AuthController::class, 'login'])->name('login');
-    Route::post('page-content', [PageContentController::class, 'create'])->name('page-content');
+Route::group(["prefix" => "api/v1", "as" => "api.v1."], function () {
+    Route::post("register", [AuthController::class, "register"])->name(
+        "register"
+    );
+    Route::post("login", [AuthController::class, "login"])->name("login");
+
+    Route::group(
+        ["prefix" => "page-content", "as" => "page-content."],
+        function () {
+            Route::post("/", [PageContentController::class, "create"])->name(
+                "create"
+            );
+            Route::put("/{page_content}", [
+                PageContentController::class,
+                "update",
+            ])->name("update");
+        }
+    );
 });

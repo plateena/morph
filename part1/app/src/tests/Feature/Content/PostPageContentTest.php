@@ -34,7 +34,7 @@ class PostPageContentTest extends TestCase
 
         // Send a POST request to the API endpoint to add the page content
         $response = $this->postJson(
-            route("api.v1.page-content"),
+            route("api.v1.page-content.create"),
             $pageContentData
         );
 
