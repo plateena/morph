@@ -45,7 +45,5 @@ class LoginApiTest extends TestCase
                 'email' => $user->email,
             ],
         ]);
-
-        // Optionally, assert other conditions based on the API response
     }
 }

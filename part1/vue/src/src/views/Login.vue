@@ -28,15 +28,21 @@ export default {
     methods: {
         login() {
             axios
-                .post('http://localhost/api/v1/login', {
-                    email: this.email,
-                    password: this.password
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
+                .post(
+                    'http://localhost/api/v1/sanctum/token',
+                    {
+                        email: this.email,
+                        password: this.password,
+                        device_name: '*'
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                            'Accept': 'application/json',
+                        }
                     }
-                })
+                )
                 .then((response) => {
                     // Handle successful login response
                     console.log('Login successful:', response.data)
