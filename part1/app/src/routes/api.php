@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,38 +21,39 @@ Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
     return $request->user();
 });
 
-Route::group(
-    ["prefix" => "v1", "as" => "api.v1."],
-    function () {
-        Route::post("register", [AuthController::class, "register"])->name(
-            "register"
-        );
-        Route::post("login", [AuthController::class, "login"])->name("login");
+Route::group(["prefix" => "v1", "as" => "api.v1."], function () {
+    Route::post("register", [AuthController::class, "register"])->name(
+        "register"
+    );
 
-        Route::group(
-            ["prefix" => "page-content", "as" => "page-content."],
-            function () {
-                Route::get("/", [PageContentController::class, "index"])->name(
-                    "index"
-                );
-                Route::get("/{pageContent}", [
-                    PageContentController::class,
-                    "show",
-                ])->name("show");
-                Route::post("/", [
-                    PageContentController::class,
-                    "create",
-                ])->name("create");
-                Route::put("/{pageContent}", [
-                    PageContentController::class,
-                    "update",
-                ])->name("update");
+    Route::post("/login", [AccessTokenController::class, "issueToken"])->name(
+        "login"
+    );
 
-                Route::delete("/{pageContent}", [
-                    PageContentController::class,
-                    "destroy",
-                ])->name("destroy");
-            }
-        );
-    }
-);
+    // Route::post("login", [AuthController::class, "login"])->name("login");
+
+    Route::group(
+        ["prefix" => "page-content", "as" => "page-content."],
+        function () {
+            Route::get("/", [PageContentController::class, "index"])->name(
+                "index"
+            );
+            Route::get("/{pageContent}", [
+                PageContentController::class,
+                "show",
+            ])->name("show");
+            Route::post("/", [PageContentController::class, "create"])->name(
+                "create"
+            );
+            Route::put("/{pageContent}", [
+                PageContentController::class,
+                "update",
+            ])->name("update");
+
+            Route::delete("/{pageContent}", [
+                PageContentController::class,
+                "destroy",
+            ])->name("destroy");
+        }
+    );
+});
