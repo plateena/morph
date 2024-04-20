@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +45,6 @@ Route::group(["prefix" => "v1", "as" => "api.v1."], function () {
 
         return $user->createToken($request->device_name)->plainTextToken;
     });
-
-    Route::post("/login", [AccessTokenController::class, "issueToken"])->name(
-        "login"
-    );
 
     // Route::post("login", [AuthController::class, "login"])->name("login");
 

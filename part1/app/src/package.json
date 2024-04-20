@@ -19,6 +19,9 @@
   "directories": {
     "test": "tests"
   },
+  "prettier": {
+      "plugins": ["@prettier/plugin-php"]
+  },
   "author": "",
   "license": "ISC"
 }
