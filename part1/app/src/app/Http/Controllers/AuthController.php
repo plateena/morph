@@ -44,7 +44,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Attempt to log in a user.
+     * Authenticate a user with the provided credentials.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -57,29 +57,35 @@ class AuthController extends Controller
             "password" => "required",
         ]);
 
-        // Attempt to authenticate the user
-        if (auth()->attempt($request->only("email", "password"))) {
-            // Authentication successful, retrieve the authenticated user
-            $user = auth()->user();
+        // Attempt to retrieve the user based on the provided email
+        $user = User::where("email", $request->email)->first();
 
-            // Return a JSON response with success message and user data
+        // Check if user exists and password is correct
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            // Authentication failed, return an error response
             return response()->json(
                 [
-                    "success" => true,
-                    "message" => "Login successful",
-                    "user" => new UserResource($user),
+                    "success" => false,
+                    "message" => "Invalid email or password.",
                 ],
-                200
+                401
             );
         }
 
-        // Authentication failed, return an error response
+        // Generate a token for the authenticated user
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
+        // Authentication successful, return success response with token
         return response()->json(
             [
-                "success" => false,
-                "message" => "Invalid credentials",
+                "success" => true,
+                "message" => "Login successful.",
+                "data" => [
+                    "token" => $token,
+                ],
             ],
-            401
+            200
         );
     }
+
 }

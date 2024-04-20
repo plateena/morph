@@ -17,42 +17,33 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { store } from './../store'
+
 export default {
     data() {
         return {
-            email: '',
-            password: ''
+            email: 'kafuvyqude@mailinator.com',
+            password: 'Pa$$w0rd!'
         }
     },
     methods: {
-        login() {
-            axios
-                .post(
-                    'http://localhost/api/v1/sanctum/token',
-                    {
-                        email: this.email,
-                        password: this.password,
-                        device_name: '*'
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*',
-                            'Accept': 'application/json',
-                        }
-                    }
-                )
-                .then((response) => {
-                    // Handle successful login response
-                    console.log('Login successful:', response.data)
-                    // Redirect to dashboard or perform other actions
+        async login() {
+            try {
+                const response = await this.$axios.post('login', {
+                    email: this.email,
+                    password: this.password,
+                    device_name: '*'
                 })
-                .catch((error) => {
-                    // Handle login error
-                    console.error('Login error:', error.response.data)
-                    // Display error message to the user
-                })
+                // Handle successful login response
+                store.commit('saveToken', response.data.data.token)
+
+                // Redirect to dashboard or perform other actions
+                this.$router.push({ name: 'home' })
+            } catch (error) {
+                // Handle login error
+                console.error('Login error:', error)
+                // Display error message to the user
+            }
         }
     }
 }

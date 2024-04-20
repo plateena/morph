@@ -53,12 +53,12 @@ export default {
                 )
                 .then((response) => {
                     // Handle successful login response
-                    console.log('Login successful:', response.data)
+                    console.log('Register successful:', response.data)
                     // Redirect to dashboard or perform other actions
                 })
                 .catch((error) => {
-                    // Handle login error
-                    console.error('Login error:', error.response.data)
+                    // Handle Register error
+                    console.error('Register error:', error.response.data)
                     // Display error message to the user
                 })
         }

@@ -28,25 +28,7 @@ Route::group(["prefix" => "v1", "as" => "api.v1."], function () {
         "register"
     );
 
-    Route::post("/sanctum/token", function (Request $request) {
-        $request->validate([
-            "email" => "required|email",
-            "password" => "required",
-            "device_name" => "required",
-        ]);
-
-        $user = User::where("email", $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                "email" => ["The provided credentials are incorrect."],
-            ]);
-        }
-
-        return $user->createToken($request->device_name)->plainTextToken;
-    });
-
-    // Route::post("login", [AuthController::class, "login"])->name("login");
+    Route::post("login", [AuthController::class, "login"])->name("login");
 
     Route::group(
         ["prefix" => "page-content", "as" => "page-content."],

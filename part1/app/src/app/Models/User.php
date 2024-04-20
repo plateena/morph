@@ -9,7 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
- * @see Illuminate\Database\Eloquent\Model;
+ * @method static self where()
+ * @method static Models first()
+ * @method static Models create()
  */
 class User extends Authenticatable
 {
